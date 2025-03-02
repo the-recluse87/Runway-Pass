@@ -1,28 +1,41 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
+* {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: white;
+.headerimg{
+    position: relative;
+    width: 250px;
+    height: 150px;
+    padding-left: 0%;
+    
 }
 
-.logo img {
-    height: 40px;
+#mini-nav{
+    float: right;
+    padding-right: 0%;
 }
 
-nav a {
-    text-decoration: none;
-    color: #005eb8;
-    font-size: 14px;
+
+#main-nav {
+    float: right;
 }
 
+.wrapper{
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-image: url(images/peoplewaiting2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.wrapper::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 27, 64, 0.9);
+}
 main {
     display: flex;
     justify-content: space-between;
@@ -33,29 +46,55 @@ main {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.banner {
-    width: 60%;
-    padding: 20px;
-    background-color: #003c88;
-    color: white;
-    border-radius: 10px;
+.text-1{
+    position:absolute;
+    font-size: 25px;
+    top: 0%;
+    left: 10%;
+    color: rgb(255, 255, 255);
+}
+.text-6{
+    position:absolute;
+    font-size: 25px;
+    top: 10%;
+    left: 10%;
+    color: rgb(255, 255, 255);
+}
+.text-2{
+    position:absolute;
+    font-size: 15px;
+    top: 25%;
+    left: 10%;
+    color: rgb(255, 255, 255);
 }
 
-.banner h1 {
-    margin: 0;
+.text-dollar{
+    position:absolute;
+    font-size: 100px;
+    top: 10%;
+    left: 10%;
+    color: rgb(255, 191, 39);
 }
-
-.banner h2 {
-    margin-top: 10px;
+.text-3{
+    position:absolute;
+    font-size: 25px;
+    top: 60%;
+    left: 10%;
+    color: rgb(255, 255, 255);
 }
-
-.banner ul {
-    list-style: none;
-    padding: 0;
+.text-4{
+    position: absolute;
+    font-size: 25px;
+    top: 70%;
+    left: 10%;
+    color: rgb(255, 255, 255);
 }
-
-.banner li {
-    margin: 10px 0;
+.text-5{
+    position: absolute;
+    font-size: 25px;
+    top: 80%;
+    left: 10%;
+    color: rgb(255, 255, 255);
 }
 
 .login-box {
