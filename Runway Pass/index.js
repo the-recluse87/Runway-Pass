@@ -1,13 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+require('dotenv').config({ path: __dirname + '/.env' });
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/accountDB', { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoURI = process.env.MONGO_CONNECTION
+
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const userSchema = new mongoose.Schema({
   firstName: String,
@@ -21,7 +24,7 @@ const userSchema = new mongoose.Schema({
   password: String
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);~
 
 app.post('/register', async (req, res) => {
   const { firstName, middleName, lastName, suffix, dobMonth, dobDay, password } = req.body;
