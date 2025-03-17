@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);~
 
+//API Endpoint to Create Account
 app.post('/register', async (req, res) => {
   const { firstName, middleName, lastName, suffix, dobMonth, dobDay, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,6 +42,7 @@ app.post('/register', async (req, res) => {
   res.status(201).send('User registered');
 });
 
+//API Endpoint to Create Account
 app.post('/login', async (req, res) => {
   const { firstName, lastName, password } = req.body;
   const user = await User.findOne({ firstName, lastName });
