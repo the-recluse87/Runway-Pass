@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Runway Pass</title>
+        <title>Select A Runway Pass</title>
         <link rel="stylesheet" href="style.css">
     </head>
 
@@ -42,48 +42,49 @@
         </div>
         <br><br><br>
     
-        <h1 class="runwaypass">Runway Pass</h1>
+        <h1 class="selectrunwaypass">Select A Runway Pass</h1>
 
         <main>
-        <div class="wrapper">
-            <p class="text-1">Flight Get Cancelled? </p>
-            <p class="text-6">Fly to the front with a Runway Pass</p><br>
-            <p class="text-2">Starting from*</p>
-            <p class="text-dollar">$25</p>
-            <ul>
-                <li class="text-3">✈️ Skip the line</li>
-                <li class="text-4">💺 Better seating and storage</li>
-                <li class="text-5">🏨 Discounted Hotel rates</li>
-            </ul>
-        </div>
+            <div id="container">
+                <div class="containerdiv">
+                    <img class="selectpassimgs" src="images/sun.png" alt="Day of Travel">
+                    <h1 class="passheadertxt">Day of Travel</h1>
+                    <p class="passparatxt">Starting at <br> $25</p>
+                    <p class="pricesvary">Prices May Vary</p>
 
-        <div class="login-box">
-            <h3>Login</h3>
-            <form>
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username">
+                    <div class="passbutton">
+                        <button class="passbutton" type="button" onclick="">Select</button>
+                    </div>
+                </div>
+                <div class="containerdiv">
+                    <img class="selectpassimgs" src="images/calendarday_January_month_calendari.png" alt="Plan Ahead">
+                    <h1 class="passheadertxt">Plan Ahead</h1>
+                    <p class="passparatxt">Starting at <br> $50
+                    <p class="pricesvary">Prices May Vary</p>
 
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password">
+                    <div class="passbutton">
+                        <button class="passbutton" type="button" onclick="">Select</button>
+                    </div>
+                </div>
+                <div class="containerdiv">
+                    <img class="selectpassimgs" src="images/grouppeople.png" alt="Group Pass">
+                    <h1 class="passheadertxt">Group Passes</h1>
+                    <p class="passparagrouptxt">Get Discounted Group <br>
+                                            Rates when travelling <br>
+                                            with 3 or more people.</p>
+                    <p class="pricesvary">Prices May Vary</p>
+                        
+                    <div class="passbutton">
+                        <button class="passbutton" type="button" onclick="">Select</button>
+                    </div>
+                </div>
+            </div>
 
-                <button type="submit">Continue</button>
-            </form>
-        </div>
+
         </main>
 
-        <section class="features">
-            <div class="feature">
-                <p>✈️ <strong>Skip the line</strong><br> Quickly choose a new flight without waiting.</p>
-            </div>
-            <div class="feature">
-                <p>💺 <strong>Better seating and storage</strong><br> Get early access to seats and storage.</p>
-            </div>
-            <div class="feature">
-                <p>🏨 <strong>Discounted Hotel stays</strong><br> Get hotel discounts when flights are unavailable.</p>
-            </div>
-        </section>
-        
-    </body>
 
 
-</html>
+        </body>
+
+    </html>

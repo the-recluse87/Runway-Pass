@@ -21,7 +21,7 @@
     padding-right: 0px;
     padding-bottom: 0%;
     margin-top: 15px;
-    margin-left: 500px;
+    margin-left: 100px;
     margin-bottom: 0px;
   }
 
@@ -39,7 +39,7 @@
 
 /* runway pass text */
 .runwaypass{
-    margin-left: 500px;
+    margin-left: 100px;
     margin-top: 20px;
     font-size: 45px;
 
@@ -170,3 +170,196 @@ button {
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
+
+/*select runway pass*/
+.selectrunwaypass{
+    margin-left: 100px;
+    margin-top: 20px;
+    font-size: 45px;
+}
+
+#container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    width: 100%;
+    background-color: rgba(17, 27, 64, 0.9);
+}
+.containerdiv{
+    border-radius: 5%;
+    height: 370px;
+    width: 335px;
+    color: black;
+    text-align: center;
+    background-color: #FFEE8C;
+    margin: 60px;
+}
+.selectpassimgs{
+    width: 50px;
+    height: 55px;
+    margin: 0%;
+    padding: 0%;
+}
+/*select pass text */
+.passheadertxt{
+    font-size: 45px;
+    margin-top: 0%;
+}
+.passparatxt{
+    font-size: 35px;
+}
+.passparagrouptxt{
+    font-size: 28px;
+}
+
+.passbutton{
+    border-radius: 10%;
+    background-color: rgba(17, 27, 64, 0.9);
+    border: none;
+    color: white;
+    border-width: 15px;
+    /*padding: 15px 32px;*/
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+/* My Account */
+.myaccttxt{
+    margin-left: 100px;
+    margin-top: 20px;
+    font-size: 45px;
+}
+.myticketstxt{
+    text-decoration: underline;
+    margin-left: 100px;
+    margin-top: 20px;
+    font-size: 35px;
+}
+
+.expticket{
+    padding-left: 100px;
+    float: left;
+}
+
+.myacctdayoftraveltxt{
+    padding-left: 100px;
+    font-size: 25px;
+}
+.getrunwaypass{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-left: 1250px;
+    background-image: url(images/manrunninginairport.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.getrunwaypass::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 27, 64, 0.6);
+}
+.getrunwaypasstxt{
+    position:absolute;
+    font-size: 17px;
+    top: 0%;
+    left: 10%;
+    color: rgb(255, 255, 255);
+}
+
+
+/* cart css*/
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container-1 {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  .urcarttxt, .dayoftraveltxt, .planaheadtxt, .grouppasstxt, .choosepaymenttxt, .totaltxt {
+    margin-bottom: 20px;
+  }
+  
+  .cart-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .cart-item img {
+    width: 100px;
+    margin-right: 20px;
+    border-radius: 8px;
+  }
+  
+  .details {
+    flex: 1;
+  }
+  
+  .details h2 {
+    margin: 0 0 5px;
+  }
+  
+  .details p {
+    margin: 5px 0;
+    font-weight: bold;
+  }
+  
+  .details input {
+    width: 60px;
+    padding: 5px;
+    margin-left: 10px;
+  }
+  
+  .subtotal {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .total-section {
+    text-align: right;
+    margin-top: 20px;
+  }
+  
+  .payment-options {
+    margin: 30px 0;
+    line-height: 2;
+  }
+  
+  .checkout-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    background-color: #ffb500;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .checkout-btn:hover {
+    background-color: #ffb500;
+  }
+
+  .purchasepassimgs{
+    width: 15px;
+    height: 100px;
+  }
+  

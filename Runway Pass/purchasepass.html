@@ -1,10 +1,10 @@
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Runway Pass</title>
+        <title>Purchase Pass</title>
         <link rel="stylesheet" href="style.css">
+        <script src="scripts.js"></script>
     </head>
 
     <body>
@@ -23,9 +23,9 @@
         </div>
         <br><br>
         </nav>
-
     </header>
-        <nav id="main-nav">
+
+    <nav id="main-nav">
         <div id="main-nav">
             
             <a href="https://www.southwest.com/air/booking/?clk=GNAV-FLIGHT" class="tab">FLIGHT</a> |
@@ -41,49 +41,59 @@
         </nav>
         </div>
         <br><br><br>
-    
-        <h1 class="runwaypass">Runway Pass</h1>
-
-        <main>
-        <div class="wrapper">
-            <p class="text-1">Flight Get Cancelled? </p>
-            <p class="text-6">Fly to the front with a Runway Pass</p><br>
-            <p class="text-2">Starting from*</p>
-            <p class="text-dollar">$25</p>
-            <ul>
-                <li class="text-3">✈️ Skip the line</li>
-                <li class="text-4">💺 Better seating and storage</li>
-                <li class="text-5">🏨 Discounted Hotel rates</li>
-            </ul>
-        </div>
-
-        <div class="login-box">
-            <h3>Login</h3>
-            <form>
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username">
-
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password">
-
-                <button type="submit">Continue</button>
-            </form>
-        </div>
-        </main>
-
-        <section class="features">
-            <div class="feature">
-                <p>✈️ <strong>Skip the line</strong><br> Quickly choose a new flight without waiting.</p>
-            </div>
-            <div class="feature">
-                <p>💺 <strong>Better seating and storage</strong><br> Get early access to seats and storage.</p>
-            </div>
-            <div class="feature">
-                <p>🏨 <strong>Discounted Hotel stays</strong><br> Get hotel discounts when flights are unavailable.</p>
-            </div>
-        </section>
+    <main>
+        <div class="container-1">
+            <h1 class="urcarttxt">Your Cart</h1>
         
+            <div class="cart-item" data-price="$25.00">
+              <img class="purchasepassimgs"  src="images/sun.png" alt="Day of Travel pass">
+              <div class="details">
+                <h2 class="dayoftraveltxt">Day of Travel Pass</h2>
+                <p>$25.00</p>
+                <label>Qty:</label>
+                <input type="number" class="quantity" value="1" min="0">
+              </div>
+              <div class="subtotal">$25.00</div>
+            </div>
+        
+            <div class="cart-item">
+              <img class="purchasepassimgs" src="images/calendarday_January_month_calendari.png" alt="Plan ahead pass">
+              <div class="details">
+                <h2 class="planaheadtxt">Plan Ahead Pass</h2>
+                <p>$50.00</p>
+                <label>Qty:</label>
+                <input type="number" class="quantity" value="1" min="0">
+              </div>
+              <div class="subtotal">$50.00</div>
+            </div>
+
+            <div class="cart-item">
+                <img class="purchasepassimgs"  src="images/grouppeople.png" alt="Group Pass">
+                <div class="details">
+                  <h2 class="grouppasstxt">Group Pass</h2>
+                  <p>$50.00</p>
+                  <label>Qty:</label>
+                  <input type="number" class="quantity" value="1" min="0">
+                </div>
+                <div class="subtotal">$20.00</div>
+              </div>
+        
+            <div class="total-section">
+              <h3 class="totaltxt">Total: $<span id="total">75.00</span></h3>
+            </div>
+        
+            <h2 class="choosepaymenttxt">Choose Payment Method</h2>
+            <div class="payment-options">
+              <label><input type="radio" name="payment" checked> Credit/Debit Card</label><br>
+              <label><input type="radio" name="payment"> PayPal</label><br>
+              <label><input type="radio" name="payment"> Apple Pay</label>
+            </div>
+        
+            <button class="checkout-btn">Proceed to Payment</button>
+          </div>
+    </main>
+
+
+    
     </body>
-
-
 </html>
