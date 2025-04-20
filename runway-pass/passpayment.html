@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .payment-container {
+      max-width: 500px;
+      margin: 2em auto;
+      background-color: #fff;
+      padding: 1.5em;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-family: Arial, sans-serif;
+    }
+
+    .payment-container h2 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    .breakdown {
+      margin-bottom: 1em;
+      border-top: 1px solid #ccc;
+      padding-top: 1em;
+    }
+
+    .breakdown p {
+      margin: 0.3em 0;
+      text-align: left;
+    }
+
+    .totals {
+      text-align: center;
+      margin-top: 1em;
+    }
+
+    .totals p {
+      margin: 0.3em 0;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 1.5em;
+      background-color: #f9a825;
+      color: black;
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #confirmationMessage {
+      margin-top: 1em;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-wrapper">
+    <a href="selectpass.html">
+      <img class="headerimg" src="images/Southwest-Airlines-Logo2.png" alt="Southwest Airlines Logo" />
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="payment-container">
+    <h2>Payment Summary</h2>
+
+    <div class="breakdown" id="itemBreakdown"></div>
+
+    <div class="totals">
+      <p>Subtotal: $<span id="subtotalDisplay">0.00</span></p>
+      <p>Tax (4.5%): $<span id="taxDisplay">0.00</span></p>
+      <p>Total: $<span id="totalDisplay">0.00</span></p>
+    </div>
+
+    <form id="paymentForm">
+      <label for="cardNumber">Card Number</label>
+      <input type="text" id="cardNumber" required>
+
+      <label for="cardName">Cardholder Name</label>
+      <input type="text" id="cardName" required>
+
+      <label for="expDate">Expiration Date (MM/YY)</label>
+      <input type="text" id="expDate" required>
+
+      <label for="cvv">CVV</label>
+      <input type="text" id="cvv" required>
+
+      <button type="submit">Pay Now</button>
+    </form>
+
+    <div id="confirmationMessage" style="display: none;">
+      Payment successful! Thank you.
+    </div>
+  </div>
+</main>
+
+<script src="passpayment.js"></script>
+</body>
+</html>

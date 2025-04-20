@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Confirmation</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .confirmation-container {
+      max-width: 600px;
+      margin: 3em auto;
+      background-color: #ffffff;
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    .confirmation-container h1 {
+      color: #2e7d32;
+    }
+
+    .confirmation-container p {
+      font-size: 1.1em;
+      margin: 1em 0;
+    }
+
+    .confirmation-buttons {
+      margin-top: 1.5em;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .confirmation-buttons a.button {
+      background-color: #f9a825;
+      padding: 12px 24px;
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .confirmation-buttons a.button:hover {
+      background-color: #fbc02d;
+    }
+
+    .confirmation-buttons a.button.secondary {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    .confirmation-buttons a.button.secondary:hover {
+      background-color: #1565c0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-wrapper">
+    <a href="selectpass.html">
+      <img class="headerimg" src="images/Southwest-Airlines-Logo2.png" alt="Southwest Airlines Logo" />
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="confirmation-container">
+    <h1>Payment Successful!</h1>
+    <p>Thank you for your purchase.</p>
+    <p>Your Runway Pass has been successfully issued. You will receive a confirmation email shortly.</p>
+    
+    <div class="confirmation-buttons">
+      <a href="index.html" class="button">Return to Homepage</a>
+      <a href="myacct.html" class="button secondary">View My Passes</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
