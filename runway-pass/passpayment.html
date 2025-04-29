@@ -3,59 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment</title>
+  <title>Payment Summary</title>
+  <link rel="icon" type="image/jpeg" href="images/southwest-icon.jpg"/>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .payment-container {
+    .payment-container 
+    {
       max-width: 500px;
       margin: 2em auto;
       background-color: #fff;
       padding: 1.5em;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       font-family: Arial, sans-serif;
     }
 
-    .payment-container h2 {
+    .payment-container h2 
+    {
       text-align: center;
       margin-bottom: 1em;
     }
 
-    .breakdown {
+    .breakdown 
+    {
       margin-bottom: 1em;
       border-top: 1px solid #ccc;
       padding-top: 1em;
     }
 
-    .breakdown p {
+    .breakdown p 
+    {
       margin: 0.3em 0;
       text-align: left;
     }
 
-    .totals {
+    .totals 
+    {
       text-align: center;
       margin-top: 1em;
     }
 
-    .totals p {
+    .totals p 
+    {
       margin: 0.3em 0;
       font-weight: bold;
     }
 
-    label {
+    label 
+    {
       display: block;
       margin-top: 1em;
       font-weight: bold;
     }
 
-    input {
+    input 
+    {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
       box-sizing: border-box;
     }
 
-    button {
+    button 
+    {
       margin-top: 1.5em;
       background-color: #f9a825;
       color: black;
@@ -67,7 +77,8 @@
       cursor: pointer;
     }
 
-    #confirmationMessage {
+    #confirmationMessage 
+    {
       margin-top: 1em;
       color: green;
       font-weight: bold;
@@ -76,14 +87,8 @@
   </style>
 </head>
 <body>
-
-<header>
-  <div class="header-wrapper">
-    <a href="selectpass.html">
-      <img class="headerimg" src="images/Southwest-Airlines-Logo2.png" alt="Southwest Airlines Logo" />
-    </a>
-  </div>
-</header>
+  <div id="top-nav-bar"></div>
+  <h1 class="runwaypass">Summary</h1>
 
 <main>
   <div class="payment-container">
@@ -100,6 +105,7 @@
     <form id="paymentForm">
       <label for="cardNumber">Card Number</label>
       <input type="text" id="cardNumber" required>
+      <div id="errorMessage" style="color: red; display: none; font-size: 0.9em;"></div>
 
       <label for="cardName">Cardholder Name</label>
       <input type="text" id="cardName" required>
@@ -120,5 +126,6 @@
 </main>
 
 <script src="passpayment.js"></script>
+<script src="top-nav-bar.js"></script>
 </body>
 </html>
