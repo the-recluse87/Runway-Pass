@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - Runway Pass</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                background-color: #f4f4f4;
+                margin: 0;
+            }
+            .header-wrapper {
+                text-align: center;
+                width: 100%;
+                margin-left: 200px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            .headerimg {
+                width: 300px;
+                height: auto;
+                margin-right: 470px;
+            }
+            .login-container {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+            .login-box {
+                width: 350px;
+                padding: 20px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+            .login-box h2 {
+                margin-bottom: 15px;
+            }
+            .login-box input {
+                width: calc(100% - 20px);
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .login-box button {
+                background-color: #ffb500;
+                border: none;
+                padding: 10px;
+                width: 100%;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .signup-link {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="header-wrapper">
+                <a href="index.html">
+                    <img class="headerimg" src="images/Southwest-Airlines-Logo2.png" alt="Southwest Airlines Logo">
+                </a>
+            </div>
+        </header>
+
+        <main class="login-container">
+            <div class="login-box">
+                <h2>Employee Login</h2>
+                <form onsubmit="return fakeLogin(event)">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="password">Employee Number</label>
+                    <input type="number" id="empnum" name="employee number" required>
+
+                    <button type="submit">Continue</button>
+                </form>
+                
+            </div>
+        </main>
+
+        <script>
+            function fakeLogin(event) {
+                event.preventDefault();
+                let username = document.getElementById("username").value;
+                let password = document.getElementById("password").value;
+                
+                if (username === "admin" && password === "password123") {
+                    alert("Login successful! Redirecting...");
+                    window.location.href = "index.html";
+                } else {
+                    alert("Invalid username or password. Please try again.");
+                }
+            }
+        </script>
+    </body>
+</html>
