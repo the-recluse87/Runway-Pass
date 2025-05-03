@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 
       if(!validateExpirationDate(expDate))
       {
-        errorMessageEl.textContent = "Invalid expiration date. Please enter a first and last name.";
+        errorMessageEl.textContent = "Invalid expiration date. Ensure that the card has not expired.";
         errorMessageEl.style.display = "block";
         return;
       }
@@ -151,14 +151,14 @@ document.addEventListener("DOMContentLoaded", async () =>
 
       try 
       {
-        await fetch("/send-confirmation-email", 
+        const response = await fetch("/send-confirmation-email", 
         {
           method: "POST",
           headers: 
           {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ email, firstName, passDetails })
+          body: JSON.stringify({ email, username, passDetails, firstName})
         })
 
         if (response.ok) 

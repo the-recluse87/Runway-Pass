@@ -5,8 +5,10 @@ const nodemailer = require('nodemailer');
 require('dotenv').config({ path: __dirname + '/.env' });
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 const path = require('path');
 app.use(express.static(__dirname));
@@ -104,24 +106,28 @@ app.post('/register', async (req, res) => {
 });
 
 // ✅ Login endpoint
-app.post('/login', async (req, res) => 
-{
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  try 
-  {
+  try {
+    console.log('Login attempt:', username);
     const user = await User.findOne({ username });
-    if (!user) return res.status(404).send('User not found');
+    if (!user) {
+      console.log('User not found');
+      return res.status(404).send('User not found');
+    }
 
+    console.log('User found:', user);
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).send('Invalid credentials');
+    if (!match) {
+      console.log('Password mismatch');
+      return res.status(401).send('Invalid credentials');
+    }
 
     const token = jwt.sign({ id: user._id, username: user.username }, jwtSecret, { expiresIn: '1h' });
-
     res.json({ token, message: 'Login successful' });
-  } 
-  catch (err) 
-  {
+  } catch (err) {
+    console.error('Error during login:', err);
     res.status(500).send('Server error during login');
   }
 });
@@ -158,7 +164,11 @@ const transporter = nodemailer.createTransport(
 
 app.post('/send-confirmation-email', async (req, res) =>
 {
-  const { email, username, passDetails} = req.body;
+  const { email, username, passDetails, firstName} = req.body;
+
+  const passDetailsList = Object.entries(passDetails)
+  .map(([item, qty]) => `<li>${qty}× ${item}</li>`)
+  .join("");
 
   const mailOptions = 
   {
@@ -169,7 +179,7 @@ app.post('/send-confirmation-email', async (req, res) =>
       <h1>Hello ${firstName}</h1>
       <p>Your Runway Pass purchase has been confirmed.</p>
       <p>Below are your pass details:</p>
-      <ul></ul>
+      <ul>${passDetailsList}</ul>
       <p>Thank your for flying Southwest</p>
       `
   };
@@ -187,5 +197,5 @@ app.post('/send-confirmation-email', async (req, res) =>
 
 app.listen(3000, () => 
 {
-  console.log('Server is running on port 3000');
+  console.log('Server is running on localhost:3000');
 });

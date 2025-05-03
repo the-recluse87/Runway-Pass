@@ -74,6 +74,8 @@
     width: 100%; /* Expand the underline to full width on hover */
 }
 
+
+
 /* runway pass text */
 .runwaypass{
     margin-left: 100px;
@@ -208,7 +210,6 @@ button
     margin-top: 2em;
 }
 
-/* Yellow button */
 .yellow-button 
 {
     background-color: #ffc107; /* Yellow */
@@ -221,10 +222,9 @@ button
     border-color: #c69500;
 }
   
-  /* Blue button */
 .blue-button 
 {
-    background-color: #007bff; /* Blue */
+    background-color: #007bff;
     border: 1px solid #0056b3;
 }
   
@@ -234,6 +234,31 @@ button
     border-color: #003f7f;
 }
 
+.green-button 
+{
+    background-color: #22a133;
+    border: 1px solid #1d812a;
+}
+    
+.green-button:hover 
+{
+    background-color: #2dc041;
+    border-color: #197a26;
+}
+
+  /* Blue button */
+.red-button 
+{
+    background-color: #be3f18; /* Blue */
+    border: 1px solid #943012;
+}
+    
+.red-button:hover 
+{
+    background-color: #cf5632;
+    border-color: #6d240d;
+}
+  
 /* features */
 .features {
     display: flex;
@@ -295,14 +320,18 @@ button
 .passbutton, .indexselectpassbutt{
     border-radius: 10%;
     background-color: #ffb500;
-    border: none;
     color: black;
-    border-width: 15px;
+    border-width: 1px;
     /*padding: 15px 32px;*/
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+.passbutton:hover
+{
+    background-color: #ffcc4d;
 }
 
 /* My Account */
