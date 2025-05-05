@@ -44,35 +44,30 @@ document.addEventListener("DOMContentLoaded", async () =>
     subtotalEl.textContent = subtotal.toFixed(2);
     taxEl.textContent = tax.toFixed(2);
     totalEl.textContent = total.toFixed(2);
-  
+
+    const token = localStorage.getItem("token");
     let email = "";
     let firstName = "";
 
-    try
-    {
-      const response = await fetch("/user-info",
-      {
-        method: "GET",
-        headers: 
-        {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+    try {
+      const userInfoResponse = await fetch("http://localhost:3000/user-info", {
+          method: "GET",
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
       });
-      if (response.ok)
-      {
-        const userInfo = await response.json();
-        email = userInfo.email;
-        firstName = userInfo.firstName;
+  
+      if (userInfoResponse.ok) {
+          const userInfo = await userInfoResponse.json();
+          email = userInfo.email;
+          firstName = userInfo.firstName;
+          console.log("User info retrieved:", userInfo);
+      } else {
+          console.error("Failed to fetch user info:", userInfoResponse.statusText);
       }
-      else
-      {
-        console.error("Failed to fetch user info:");
-      }
-    }
-    catch(error)
-    {
+  } catch (error) {
       console.error("Error fetching user info:", error);
-    }
+  }
 
     function validateCardNumber(cardNumber) 
     {
@@ -147,41 +142,37 @@ document.addEventListener("DOMContentLoaded", async () =>
 
       document.getElementById("confirmationMessage").style.display = "block";
 
-      const passDetails = breakdown;
-
-      try 
-      {
-        const response = await fetch("/send-confirmation-email", 
-        {
-          method: "POST",
-          headers: 
-          {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ email, username, passDetails, firstName})
-        })
-
-        if (response.ok) 
-        {
-          const data = await response.json();
-          console.log("Confirmation email sent:", data);
-        } 
-        else 
-        {
-          console.error("Failed to send confirmation email:", response.statusText);
-        }
-      } 
-      catch (error) 
-      {
-        console.error("Failed to send confirmation email:", error);
-      }
-
-      // ✅ Redirect after 2 seconds
-      setTimeout(() => 
-      {
-        window.location.href = "paymentconfirmation.html";
-      }, 2000);
-    });
+      try {
+        console.log("Sending confirmation email with the following data:");
+        console.log("Email:", email);
+        console.log("First Name:", firstName);
     
+        const token = localStorage.getItem("token");
+        console.log("Retrieved token:", token);
+
+        const response = await fetch("http://localhost:3000/send-confirmation-email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ email, firstName }),
+        });
+    
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Confirmation email sent:", data);
+        } else {
+            console.error("Failed to send confirmation email:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Failed to send confirmation email:", error);
+    }
+      // ✅ Redirect after 2 seconds
+      //setTimeout(() => 
+      //{
+      //  window.location.href = "paymentconfirmation.html";
+      //}, 5000);
+    });  
 });
   

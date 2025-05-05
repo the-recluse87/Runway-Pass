@@ -49,7 +49,7 @@
 {
     text-decoration: none; /* Remove default underline */
     font-weight: bold; /* Make text bold */
-    color: #007bff; /* Blue text */
+    color: #104ab5; /* Blue text */
     padding: 5px;
     position: relative; /* Required for the ::after pseudo-element */
 }
@@ -74,12 +74,29 @@
     width: 100%; /* Expand the underline to full width on hover */
 }
 
-
+.selectpassbutton{
+    position: absolute;
+    bottom: 60px;
+    right: 50px;
+    padding: 12px 20px;
+    border-radius: 4%;
+    width: 200px;
+    background-color: #ffb500;
+    border: none;
+    color: black;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    z-index: 2;
+    
+}
 
 /* runway pass text */
 .runwaypass{
     margin-left: 100px;
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 50px;
     color: #2a48b3;
 
@@ -236,29 +253,40 @@ button
 
 .green-button 
 {
-    background-color: #22a133;
-    border: 1px solid #1d812a;
+    background-color: #ffb500;
+    border: 1px solid #c28b00;
 }
     
 .green-button:hover 
 {
-    background-color: #2dc041;
-    border-color: #197a26;
+    background-color: #e6ab18;
+    border-color: #c59315;
 }
 
-  /* Blue button */
 .red-button 
 {
-    background-color: #be3f18; /* Blue */
-    border: 1px solid #943012;
+    background-color: #f3321e;
+    border: 1px solid #c22a19;
 }
     
 .red-button:hover 
 {
-    background-color: #cf5632;
-    border-color: #6d240d;
+    background-color: #bb2c1c;
+    border-color: #a72517;
 }
-  
+
+.gray-button 
+{
+    background-color: #2b49f0; /* Blue */
+    border: 1px solid #223bc4;
+}
+
+.gray-button:hover
+{
+    background-color: #223bc4; /* Blue */
+    border: 1px solid #283ba8;
+}
+
 /* features */
 .features {
     display: flex;
@@ -304,6 +332,16 @@ button
     height: 55px;
     margin: 0%;
     padding: 0%;
+}
+
+.pricetxt
+{
+    width: 50px;
+    height: 55px;
+    margin-left: 14vw;
+    margin-top: -5vh;
+    padding: 0%;
+    color: rgb(23, 141, 23);
 }
 /*select pass text */
 .passheadertxt{
