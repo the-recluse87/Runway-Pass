@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const { google } = require('googleapis');
 const nodemailer = require('nodemailer');
 require('dotenv').config({ path: __dirname + '/.env' });
+const { spawn } = require('child_process');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
@@ -16,14 +16,6 @@ app.use(express.static(__dirname));
 
 const mongoURI = process.env.MONGO_CONNECTION;
 const jwtSecret = process.env.JWT_SECRET || 'supersecretkey';
-
-const oAuth2Client = new google.auth.OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  process.env.REDIRECT_URI
-);
-
-oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -69,9 +61,33 @@ const employeeSchema = new mongoose.Schema({
   employeePassword: String,
 });
 
+const airportSchema = new mongoose.Schema({
+  airportID: String,
+  airportName: String,
+  airportCity: String,
+  State: String,
+  airportCode: String,
+});
+
+const runwayPassSchema = new mongoose.Schema({
+  runwayPassID: String,
+  departure: String,
+  arrival: String,
+  date: String,
+  flightID: String,
+  userFirst: String,
+  userLast: String,
+  passImage: String,
+  userID: String,
+});
+
 const Employee = mongoose.model('Employee', employeeSchema, 'employee');
 
 const User = mongoose.model('User', userSchema, 'customer');
+
+const Airport = mongoose.model('Airport', airportSchema, 'airport');
+
+const RunwayPass = mongoose.model('RunwayPass', runwayPassSchema, 'runwayPass');
 
 // ✅ Register endpoint
 app.post('/register', async (req, res) => {
@@ -145,7 +161,7 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign(
       { id: user._id, username: user.username },
       jwtSecret,
-      { expiresIn: '1h' }
+      { expiresIn: '30d' }
     );
 
     res.status(200).json({
@@ -229,6 +245,7 @@ app.get('/user-info', async (req, res) => {
       const userInfo = {
           email: user.email,
           firstName: user.firstName,
+          lastName: user.lastName
       };
       res.status(200).json(userInfo);
   } catch (error) {
@@ -241,19 +258,12 @@ app.get('/user-info', async (req, res) => {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    type: 'OAuth2',
     user: process.env.EMAIL_USER,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
-    accessToken: async () => {
-      const { token } = await oAuth2Client.getAccessToken();
-      return token;
-    },
+    pass: process.env.EMAIL_PASS
   },
   tls: {
-    rejectUnauthorized: false,
-  },
+    rejectUnauthorized: false
+  }
 });
 
 app.post('/send-confirmation-email', async (req, res) => {
@@ -264,10 +274,7 @@ app.post('/send-confirmation-email', async (req, res) => {
   }
 
   try {
-    console.log("Verifying token...");
     const decoded = jwt.verify(token, jwtSecret);
-    console.log("Decoded token:", decoded);
-
     const user = await User.findById(decoded.id);
     if (!user) {
       console.error("User not found for ID:", decoded.id);
@@ -275,15 +282,23 @@ app.post('/send-confirmation-email', async (req, res) => {
     }
 
     const { email, firstName } = user;
+    const { passes } = req.body;
 
-    console.log("Received request to send confirmation email.");
-    console.log("Email:", email);
-    console.log("First Name:", firstName);
-
-    if (!email || !firstName) {
-      console.error("Missing email or firstName in the request body.");
-      return res.status(400).send("Missing email or firstName.");
+    if (!passes || passes.length === 0) {
+      console.error("No passes provided in request body.");
+      return res.status(400).send("No passes provided");
     }
+
+    // Generate HTML for pass details
+    const passDetailsHtml = passes.map(pass => `
+      <li>
+        <strong>Pass ID:</strong> ${pass.runwayPassID}<br>
+        <strong>Departure:</strong> ${pass.departure}<br>
+        <strong>Arrival:</strong> ${pass.arrival}<br>
+        <strong>Date:</strong> ${pass.date}<br>
+        <strong>Flight Confirmation:</strong> ${pass.flightID}
+      </li>
+    `).join("");
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -293,7 +308,7 @@ app.post('/send-confirmation-email', async (req, res) => {
         <h1>Hello, ${firstName}!</h1>
         <p>Your Runway Pass purchase has been confirmed.</p>
         <p>Below are your pass details:</p>
-        <ul></ul>
+        <ul>${passDetailsHtml}</ul>
         <p>Thank you for choosing Southwest Airlines.</p>
       `,
     };
@@ -301,10 +316,131 @@ app.post('/send-confirmation-email', async (req, res) => {
     console.log("Attempting to send email...");
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent successfully:", info.response);
-    res.status(200).send("Confirmation email sent successfully");
+    res.status(200).json({ message: "Confirmation email sent successfully" });
   } catch (err) {
     console.error("Failed to send email:", err);
     res.status(500).send("Failed to send confirmation email");
+  }
+});
+
+app.get('/airports', async (req, res) => {
+  try 
+  {
+    const airports = await Airport.find({}, { airportCode: 1, airportName: 1, _id: 0 }); 
+    res.status(200).json(airports);
+  } 
+  catch (err) 
+  {
+    console.error('Error fetching airports:', err);
+    res.status(500).json({ message: 'Server error while fetching airports' });
+  }
+});
+
+app.post('/generate-pass', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).send("Unauthorized: No token provided");
+  }
+
+  try {
+    // Verify the token and extract the user ID
+    const decoded = jwt.verify(token, jwtSecret);
+    const userID = decoded.id;
+
+    const { name, passes } = req.body;
+    if (!name || !passes || !Array.isArray(passes) || passes.length === 0) {
+      return res.status(400).send("Missing pass data");
+    }
+
+    let createdPasses = [];
+    for (const pass of passes) {
+      const args = [
+        name,
+        pass.departure,
+        pass.arrival,
+        pass.confirmation,
+      ];
+      const pythonScript = path.join(__dirname, 'makepass.py');
+
+      let passDate;
+      if (pass.type === "day of travel") {
+        passDate = new Date().toISOString().split('T')[0];
+      } else {
+        const randomFutureDate = new Date();
+        randomFutureDate.setDate(randomFutureDate.getDate() + Math.floor(Math.random() * 30) + 1);
+        passDate = randomFutureDate.toISOString().split('T')[0];
+      }
+
+      await new Promise((resolve) => {
+        const python = spawn('py', [pythonScript, ...args]);
+        let base64Image = '';
+
+        python.stdout.on('data', (data) => {
+          base64Image += data.toString().trim();
+        });
+
+        python.stderr.on('data', (data) => {
+          console.error(`makepass.py error: ${data}`);
+        });
+
+        python.on('close', async (code) => {
+          if (code === 0) {
+            try {
+              const nameParts = name.trim().split(' ');
+              const userFirst = nameParts[0];
+              const userLast = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+              const newRunwayPass = new RunwayPass({
+                runwayPassID: `RP${Date.now()}`,
+                flightID: pass.confirmation,
+                departure: pass.departure,
+                arrival: pass.arrival,
+                date: passDate,
+                userFirst: userFirst,
+                userLast: userLast,
+                passImage: base64Image,
+                userID: userID,
+              });
+
+              const savedPass = await newRunwayPass.save();
+              createdPasses.push(savedPass.toObject());
+            } catch (err) {
+              console.error("Error storing runway pass:", err);
+            }
+          }
+          resolve();
+        });
+      });
+    }
+
+    if (createdPasses.length > 0) {
+      res.status(200).json({ message: "Passes generated successfully", passes: createdPasses });
+    } else {
+      res.status(500).send("Failed to generate passes");
+    }
+  } catch (err) {
+    console.error("Error verifying token or processing passes:", err);
+    res.status(401).send("Invalid token");
+  }
+});
+
+app.get('/get-user-passes', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).send("Unauthorized: No token provided");
+  }
+
+  try {
+    // Verify the token and extract the user ID
+    const decoded = jwt.verify(token, jwtSecret);
+    const userID = decoded.id;
+
+    // Fetch all runway passes for the logged-in user
+    const passes = await RunwayPass.find({ userID });
+    res.status(200).json(passes);
+  } catch (err) {
+    console.error("Error fetching user passes:", err);
+    res.status(500).send("Failed to fetch user passes");
   }
 });
 

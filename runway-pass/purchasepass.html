@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -15,37 +16,37 @@
         <div class="container-1">
             <h1 class="urcarttxt">Your Cart</h1>
         
-            <div class="cart-item" data-price="$25.00">
-              <img class="purchasepassimgs"  src="images/sun.png" alt="Day of Travel pass">
+            <div class="cart-item" data-price="$50.00">
+              <img class="purchasepassimgs" src="images/sun.png" alt="Day of Travel pass">
               <div class="details">
                 <h2 class="dayoftraveltxt">Day of Travel Pass</h2>
                 <p>$50.00</p>
                 <label>Qty:</label>
-                <input type="number" class="quantity" value="0" min="0">
+                <input type="number" class="quantity" value="0" min="0" data-pass-type="day-of-travel">
               </div>
-              <div class="subtotal">$50.00</div>
+              <div class="pass-fields" id="day-of-travel-fields"></div>
             </div>
         
-            <div class="cart-item">
+            <div class="cart-item" data-price="$25.00">
               <img class="purchasepassimgs" src="images/calendarday_January_month_calendari.png" alt="Plan ahead pass">
               <div class="details">
                 <h2 class="planaheadtxt">Plan Ahead Pass</h2>
                 <p>$25.00</p>
                 <label>Qty:</label>
-                <input type="number" class="quantity" value="0" min="0">
+                <input type="number" class="quantity" value="0" min="0" data-pass-type="plan-ahead">
               </div>
-              <div class="subtotal">$25.00</div>
+              <div class="pass-fields" id="plan-ahead-fields"></div>
             </div>
 
-            <div class="cart-item">
-                <img class="purchasepassimgs"  src="images/grouppeople.png" alt="Group Pass">
+            <div class="cart-item" data-price="$15.00">
+                <img class="purchasepassimgs" src="images/grouppeople.png" alt="Group Pass">
                 <div class="details">
                   <h2 class="grouppasstxt">Group Pass</h2>
                   <p>$15.00</p>
                   <label>Qty:</label>
-                  <input type="number" class="quantity" value="0" min="0">
+                  <input type="number" class="quantity" value="0" min="0" data-pass-type="group">
                 </div>
-                <div class="subtotal">$15.00</div>
+                <div class="pass-fields" id="group-fields"></div>
               </div>
         
             <div class="total-section">

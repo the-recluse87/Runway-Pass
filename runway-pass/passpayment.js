@@ -4,11 +4,11 @@ document.addEventListener("DOMContentLoaded", async () =>
     const taxEl = document.getElementById("taxDisplay");
     const totalEl = document.getElementById("totalDisplay");
     const breakdownEl = document.getElementById("itemBreakdown");
-  
+
     const params = new URLSearchParams(window.location.search);
     const breakdownParam = params.get("breakdown");
     const totalParam = parseFloat(params.get("total")) || 0;
-  
+
     let breakdown;
     try 
     {
@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", async () =>
     {
       breakdown = {};
     }
-  
+
     let subtotal = 0;
     breakdownEl.innerHTML = ""; // Clear in case of reload
-  
+
     for (const [item, qty] of Object.entries(breakdown)) 
     {
       if (qty > 0) 
@@ -30,17 +30,17 @@ document.addEventListener("DOMContentLoaded", async () =>
         if (item.includes("Day of Travel")) price = 50;
         else if (item.includes("Plan Ahead")) price = 25;
         else if (item.includes("Group Pass")) price = 15;
-  
+
         const line = document.createElement("p");
         line.textContent = `${qty}× ${item} - $${(qty * price).toFixed(2)}`;
         breakdownEl.appendChild(line);
         subtotal += qty * price;
       }
     }
-  
+
     const tax = subtotal * 0.045;
     const total = subtotal + tax;
-  
+
     subtotalEl.textContent = subtotal.toFixed(2);
     taxEl.textContent = tax.toFixed(2);
     totalEl.textContent = total.toFixed(2);
@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", async () =>
     const token = localStorage.getItem("token");
     let email = "";
     let firstName = "";
+    let lastName = "";
 
     try {
       const userInfoResponse = await fetch("http://localhost:3000/user-info", {
@@ -56,18 +57,19 @@ document.addEventListener("DOMContentLoaded", async () =>
               Authorization: `Bearer ${token}`,
           },
       });
-  
+
       if (userInfoResponse.ok) {
           const userInfo = await userInfoResponse.json();
           email = userInfo.email;
           firstName = userInfo.firstName;
+          lastName = userInfo.lastName;
           console.log("User info retrieved:", userInfo);
       } else {
           console.error("Failed to fetch user info:", userInfoResponse.statusText);
       }
-  } catch (error) {
+    } catch (error) {
       console.error("Error fetching user info:", error);
-  }
+    }
 
     function validateCardNumber(cardNumber) 
     {
@@ -92,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 
     function validateExpirationDate(expDate)
     {
-      return /^\d{1}\/\d{2}$/.test(expDate);
+      return /^\d{1,2}\/\d{2}$/.test(expDate);
     }
 
     function validateCVV(cvv)
@@ -142,13 +144,36 @@ document.addEventListener("DOMContentLoaded", async () =>
 
       document.getElementById("confirmationMessage").style.display = "block";
 
+      // --- Send all pass data to backend to generate passes ---
+      const passData = JSON.parse(localStorage.getItem("passDetails") || "{}");
+      passData.name = `${firstName} ${lastName}`;
+      let generatedPasses = [];
       try {
-        console.log("Sending confirmation email with the following data:");
-        console.log("Email:", email);
-        console.log("First Name:", firstName);
-    
-        const token = localStorage.getItem("token");
-        console.log("Retrieved token:", token);
+        const genResponse = await fetch("http://localhost:3000/generate-pass", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(passData),
+        });
+        if (genResponse.ok) {
+          const genData = await genResponse.json();
+          console.log("generate-pass response:", genData); // DEBUG
+          generatedPasses = genData.passes || [];
+          console.log("generatedPasses array:", generatedPasses); // DEBUG
+        } else {
+          const errorText = await genResponse.text();
+          console.error("Failed to generate passes:", genResponse.statusText, errorText); // DEBUG
+        }
+      } catch (error) {
+        console.error("Failed to generate pass:", error);
+      }
+
+      // --- Send confirmation email with only the new passes ---
+      try {
+        // DEBUG: Log what is being sent to the backend
+        console.log("Sending passes to confirmation email:", generatedPasses);
 
         const response = await fetch("http://localhost:3000/send-confirmation-email", {
             method: "POST",
@@ -156,23 +181,29 @@ document.addEventListener("DOMContentLoaded", async () =>
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ email, firstName }),
+            // Ensure plain objects are sent
+            body: JSON.stringify({ passes: generatedPasses.map(p => ({
+              runwayPassID: p.runwayPassID,
+              departure: p.departure,
+              arrival: p.arrival,
+              date: p.date,
+              flightID: p.flightID
+            })) }),
         });
     
         if (response.ok) {
             const data = await response.json();
             console.log("Confirmation email sent:", data);
         } else {
-            console.error("Failed to send confirmation email:", response.statusText);
+            const errorText = await response.text();
+            console.error("Failed to send confirmation email:", response.statusText, errorText);
         }
-    } catch (error) {
+      } catch (error) {
         console.error("Failed to send confirmation email:", error);
-    }
-      // ✅ Redirect after 2 seconds
-      //setTimeout(() => 
-      //{
+      }
+
+      //setTimeout(() => {
       //  window.location.href = "paymentconfirmation.html";
-      //}, 5000);
+      //}, 2000);
     });  
 });
-  
