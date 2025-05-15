@@ -194,6 +194,7 @@ document.addEventListener("DOMContentLoaded", async () =>
         if (response.ok) {
             const data = await response.json();
             console.log("Confirmation email sent:", data);
+            window.location.href = "paymentconfirmation.html";
         } else {
             const errorText = await response.text();
             console.error("Failed to send confirmation email:", response.statusText, errorText);
@@ -201,9 +202,5 @@ document.addEventListener("DOMContentLoaded", async () =>
       } catch (error) {
         console.error("Failed to send confirmation email:", error);
       }
-
-      //setTimeout(() => {
-      //  window.location.href = "paymentconfirmation.html";
-      //}, 2000);
     });  
 });

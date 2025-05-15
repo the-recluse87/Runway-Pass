@@ -1,54 +1,35 @@
-(() => {
-  // Private data for employee portal (example)
-  const empportalPassengers = [
-    {
-      firstName: 'Alice',
-      lastName: 'Smith',
-      dob: '1990-01-15',
-      idNumber: '123',
-      ticketNumber: 'TCK12345',
-      hasPass: true,
-    },
-    {
-      firstName: 'Bob',
-      lastName: 'Johnson',
-      dob: '1985-05-22',
-      idNumber: '456',
-      ticketNumber: 'TCK67890',
-      hasPass: false,
-    },
-  ];
+document.getElementById('empportal-form').addEventListener('submit', async function(event) {
+  event.preventDefault();
 
-  function checkPass(event) {
-    event.preventDefault();
+  const firstName = document.getElementById('empportal-firstName').value.trim();
+  const lastName = document.getElementById('empportal-lastName').value.trim();
+  // Use the raw value, do not convert!
+  const date = document.getElementById('empportal-dob').value;
+  const runwayPassID = document.getElementById('empportal-flightnumber').value.trim();
 
-    const firstName = document.getElementById('empportal-firstName').value.trim().toLowerCase();
-    const lastName = document.getElementById('empportal-lastName').value.trim().toLowerCase();
-    const dob = document.getElementById('empportal-dob').value;
-    const idNumber = document.getElementById('empportal-idNumber').value.trim();
-    const ticketNumber = document.getElementById('empportal-ticketNumber').value.trim().toUpperCase();
+  const resultDiv = document.getElementById('empportal-result');
+  resultDiv.textContent = "Checking...";
+  console.log('Submitting values:', {
+    userFirst: firstName,
+    userLast: lastName,
+    date: date,
+    runwayPassID: runwayPassID
+  });
 
-    const resultDiv = document.getElementById('empportal-result');
+  try {
+    const response = await fetch('/verify-pass', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userFirst: firstName, userLast: lastName, date, runwayPassID })
+    });
 
-    const match = empportalPassengers.find(p =>
-      p.firstName.toLowerCase() === firstName &&
-      p.lastName.toLowerCase() === lastName &&
-      p.dob === dob &&
-      p.idNumber === idNumber &&
-      p.ticketNumber === ticketNumber
-    );
-
-    if (match) {
-      resultDiv.innerHTML = `${match.firstName} ${match.lastName} — 
-        <span class="${match.hasPass ? 'empportal-pass' : 'empportal-no-pass'}">
-          ${match.hasPass ? 'Has Runway Pass ✅' : 'No Runway Pass ❌'}
-        </span>`;
-      resultDiv.className = 'empportal-result';
+    const data = await response.json();
+    if (response.ok && data.found) {
+      resultDiv.innerHTML = `<span class="empportal-pass">Runway Pass Verified</span>`;
     } else {
-      resultDiv.textContent = 'Passenger not found or information mismatch.';
-      resultDiv.className = 'empportal-result empportal-no-pass';
+      resultDiv.innerHTML = `<span class="empportal-no-pass">No matching Runway Pass ❌</span>`;
     }
+  } catch (err) {
+    resultDiv.innerHTML = `<span class="empportal-no-pass">Error checking pass.</span>`;
   }
-
-  document.getElementById('empportal-form').addEventListener('submit', checkPass);
-})();
+});

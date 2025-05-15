@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Employee Portal</title>
-        <link rel="icon" type="image/jpeg" href="images/southwest-icon.jpg"/>
-        <link rel="stylesheet" href="style.css">
-        <script src="employee-portal.js"></script>
-    </head>
-    
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal</title>
+    <link rel="icon" type="image/jpeg" href="images/southwest-icon.jpg"/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="empportal-body">
     <header>
         <div class="header-wrapper">
             <a href="index.html">
@@ -16,25 +15,22 @@
             </a>
         </div>
     </header>
-    <body class="empportal-body">
-        <div id="top-nav-bar"></div>
-        <br>
-        <br>
-        <h1 class="runwaypass">Employee Portal</h1>
-
-        <div class="empportal-container">
+    <div id="top-nav-bar"></div>
+    <br>
+    <br>
+    <br>
+    <h1 class="runwaypass">Employee Portal</h1>
+    <div class="empportal-container">
         <h2 class="empportal-title">Runway Pass Checker</h2>
         <form id="empportal-form">
-        <input type="text" id="empportal-firstName" placeholder="First Name" required />
-        <input type="text" id="empportal-lastName" placeholder="Last Name" required />
-        <input type="date" id="empportal-dob" placeholder="Date of Birth" required />
-        <input type="text" id="empportal-idNumber" placeholder="ID Number" required />
-        <input type="text" id="empportal-ticketNumber" placeholder="Ticket Number" required />
-
-        <button type="submit" class="empportal-button">Search</button>
-
-    </form>
-    <div id="empportal-result" class="empportal-result"></div>
-  </div>
-    </body>
+            <input type="text" id="empportal-firstName" placeholder="First Name" required />
+            <input type="text" id="empportal-lastName" placeholder="Last Name" required />
+            <input type="date" id="empportal-dob" placeholder="Date of Departure" required />
+            <input type="text" id="empportal-flightnumber" placeholder="Runway Pass ID" required />
+            <button type="submit" class="empportal-button">Search</button>
+        </form>
+        <div id="empportal-result" class="empportal-result"></div>
+    </div>
+    <script src="empportal.js"></script>
+</body>
 </html>

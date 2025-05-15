@@ -100,7 +100,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   calculateTotal();
 
   // Proceed to payment: collect all pass data and store in localStorage
-  document.querySelector(".checkout-btn").addEventListener("click", async () => {
+  document.querySelector(".checkout-btn").addEventListener("click", async (e) => {
+    // Require all flight confirmation numbers to be filled and valid
+    const confirmationInputs = document.querySelectorAll('.flight-confirmation');
+    let allValid = true;
+    confirmationInputs.forEach(input => {
+      if (!validateFlightConfirmation(input.value)) {
+        input.style.border = "2px solid red";
+        allValid = false;
+      } else {
+        input.style.border = "";
+      }
+    });
+
+    if (!allValid) {
+      alert("Please enter a valid 6-character flight confirmation number for each pass.");
+      return;
+    }
+
     let passDetails = [];
     quantities.forEach((input, index) => {
       const qty = parseInt(input.value) || 0;

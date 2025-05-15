@@ -1,45 +1,58 @@
 document.addEventListener("DOMContentLoaded", function () {
-    fetch("top-nav-bar.html")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to load top-nav-bar.html");
+    const token = localStorage.getItem("token");
+    // Get nav item containers
+    const loginNav = document.getElementById("login-nav");
+    const createAcctNav = document.getElementById("create-account-nav");
+    const myAcctNav = document.getElementById("my-account-nav");
+    const logoutNav = document.getElementById("logout-nav");
+    const logoutBtn = document.getElementById("logout-button");
+
+    // Show/hide links based on login status
+    if (token) {
+        // Show My Account and Log Out, hide Create Account and Log In
+        if (loginNav) loginNav.style.display = "none";
+        if (createAcctNav) createAcctNav.style.display = "none";
+        if (myAcctNav) myAcctNav.style.display = "";
+        if (logoutNav) logoutNav.style.display = "";
+        if (logoutBtn) {
+            logoutBtn.onclick = function (event) {
+                event.preventDefault();
+                localStorage.removeItem("token");
+                alert("You have been logged out.");
+                window.location.reload();
+            };
+        }
+    } else {
+        // Show Create Account and Log In, hide My Account and Log Out
+        if (loginNav) loginNav.style.display = "";
+        if (createAcctNav) createAcctNav.style.display = "";
+        if (myAcctNav) myAcctNav.style.display = "none";
+        if (logoutNav) logoutNav.style.display = "none";
+    }
+
+    // Dynamically add | dividers between visible links
+    const miniNav = document.querySelector("#mini-nav > div") || document.getElementById("mini-nav");
+    if (miniNav) {
+        // Remove any existing dividers
+        Array.from(miniNav.querySelectorAll('.divider')).forEach(div => div.remove());
+
+        // Get all visible nav links
+        const visibleLinks = Array.from(miniNav.querySelectorAll("a"))
+    .filter(el => {
+        // Only count links that are visible (and whose parent is visible, for spans)
+        const parent = el.parentElement;
+        return el.style.display !== "none" &&
+               (!parent || parent.style.display !== "none");
+    });
+
+        // Add dividers between them
+        visibleLinks.forEach((el, idx) => {
+            if (idx < visibleLinks.length - 1) {
+                const divider = document.createElement("span");
+                divider.textContent = " | ";
+                divider.className = "divider";
+                el.after(divider);
             }
-            return response.text();
-        })
-        .then((html) => {
-            document.getElementById("top-nav-bar").innerHTML = html;
-
-            // Check if the user is logged in
-            const token = localStorage.getItem("token"); // Check for the token in localStorage
-
-            const loginButton = document.getElementById("login-button");
-            const createAccountButton = document.getElementById("create-account-button");
-            const myAccountButton = document.getElementById("my-account-button");
-            const logoutButton = document.getElementById("logout-button");
-
-            if (token) {
-                // User is logged in
-                if (loginButton) loginButton.style.display = "none";
-                if (createAccountButton) createAccountButton.style.display = "none";
-                if (myAccountButton) myAccountButton.style.display = "inline-block";
-                if (logoutButton) {
-                    logoutButton.style.display = "inline-block";
-                    logoutButton.addEventListener("click", () => {
-                        // Clear the token and reload the page
-                        localStorage.removeItem("token");
-                        alert("You have been logged out.");
-                        window.location.reload();
-                    });
-                }
-            } else {
-                // User is not logged in
-                if (loginButton) loginButton.style.display = "inline-block";
-                if (createAccountButton) createAccountButton.style.display = "inline-block";
-                if (myAccountButton) myAccountButton.style.display = "none";
-                if (logoutButton) logoutButton.style.display = "none";
-            }
-        })
-        .catch((error) => {
-            console.error("Error loading top-nav-bar:", error);
         });
+    }
 });

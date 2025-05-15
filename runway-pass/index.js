@@ -81,6 +81,19 @@ const runwayPassSchema = new mongoose.Schema({
   userID: String,
 });
 
+const runwayPassUsedSchema = new mongoose.Schema({
+  runwayPassID: String,
+  departure: String,
+  arrival: String,
+  date: String,
+  flightID: String,
+  userFirst: String,
+  userLast: String,
+  passImage: String,
+  userID: String,
+  dateUsed: String,
+});
+
 const Employee = mongoose.model('Employee', employeeSchema, 'employee');
 
 const User = mongoose.model('User', userSchema, 'customer');
@@ -88,6 +101,8 @@ const User = mongoose.model('User', userSchema, 'customer');
 const Airport = mongoose.model('Airport', airportSchema, 'airport');
 
 const RunwayPass = mongoose.model('RunwayPass', runwayPassSchema, 'runwayPass');
+
+const RunwayPassUsed = mongoose.model('RunwayPassUsed', runwayPassUsedSchema, 'runwayPassUsed');
 
 // ✅ Register endpoint
 app.post('/register', async (req, res) => {
@@ -354,22 +369,35 @@ app.post('/generate-pass', async (req, res) => {
 
     let createdPasses = [];
     for (const pass of passes) {
-      const args = [
-        name,
-        pass.departure,
-        pass.arrival,
-        pass.confirmation,
+    // Auto-populate city names from airport codes
+    const departureAirport = await Airport.findOne({ airportCode: pass.departure });
+    const departure_city = departureAirport ? departureAirport.airportCity : pass.departure;
+
+    const arrivalAirport = await Airport.findOne({ airportCode: pass.arrival });
+    const arrival_city = arrivalAirport ? arrivalAirport.airportCity : pass.arrival;
+
+    const runwayPassID = `RP${Date.now()}${Math.floor(Math.random() * 1000)}`;
+
+    let passDate;
+    if (pass.type === "day of travel") {
+      passDate = new Date().toISOString().split('T')[0];
+    } else {
+      const randomFutureDate = new Date();
+      randomFutureDate.setDate(randomFutureDate.getDate() + Math.floor(Math.random() * 30) + 1);
+      passDate = randomFutureDate.toISOString().split('T')[0];
+    }
+
+    const args = [
+      name,
+      pass.departure,
+      pass.arrival,
+      pass.confirmation,
+      departure_city,
+      arrival_city,
+      passDate,
+      runwayPassID
       ];
       const pythonScript = path.join(__dirname, 'makepass.py');
-
-      let passDate;
-      if (pass.type === "day of travel") {
-        passDate = new Date().toISOString().split('T')[0];
-      } else {
-        const randomFutureDate = new Date();
-        randomFutureDate.setDate(randomFutureDate.getDate() + Math.floor(Math.random() * 30) + 1);
-        passDate = randomFutureDate.toISOString().split('T')[0];
-      }
 
       await new Promise((resolve) => {
         const python = spawn('py', [pythonScript, ...args]);
@@ -391,7 +419,7 @@ app.post('/generate-pass', async (req, res) => {
               const userLast = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
               const newRunwayPass = new RunwayPass({
-                runwayPassID: `RP${Date.now()}`,
+                runwayPassID: runwayPassID,
                 flightID: pass.confirmation,
                 departure: pass.departure,
                 arrival: pass.arrival,
@@ -441,6 +469,37 @@ app.get('/get-user-passes', async (req, res) => {
   } catch (err) {
     console.error("Error fetching user passes:", err);
     res.status(500).send("Failed to fetch user passes");
+  }
+});
+
+app.post('/verify-pass', async (req, res) => {
+  const { userFirst, userLast, date, runwayPassID } = req.body;
+  if (!userFirst || !userLast || !date || !runwayPassID) {
+    return res.status(400).json({ found: false, error: "Missing fields" });
+  }
+  try {
+    // Find the pass
+    const pass = await RunwayPass.findOne({
+      userFirst: { $regex: new RegExp(`^${userFirst}$`, 'i') },
+      userLast: { $regex: new RegExp(`^${userLast}$`, 'i') },
+      date,
+      runwayPassID
+    });
+
+    if (!pass) {
+      return res.json({ found: false });
+    }
+
+    // Move to RunwayPassUsed with dateUsed
+    const usedPass = pass.toObject();
+    usedPass.dateUsed = new Date().toISOString();
+
+    await RunwayPassUsed.create(usedPass);
+    await RunwayPass.deleteOne({ _id: pass._id });
+
+    res.json({ found: true });
+  } catch (err) {
+    res.status(500).json({ found: false, error: "Server error" });
   }
 });
 
